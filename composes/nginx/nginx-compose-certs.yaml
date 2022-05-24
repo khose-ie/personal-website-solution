@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+    nginx-certs-backup:
+        image: nginx:$NGINX_VERSION
+        container_name: khose-ie-nginx-certs-backup
+        entrypoint: tar
+        command:
+            - -zcf
+            - /root/backup/nginx-certs-backup.tar.gz
+            - -C/etc/nginx/cert.d/
+            - $MAIN_CERT_PEM
+            - $MAIN_CERT_KEY
+        volumes:
+            - khose-ie-nginx-certs:/etc/nginx/cert.d
+            - $BASE_PATH/backup:/root/backup
+        networks:
+            - nginx
+
+    nginx-certs-restore:
+        image: nginx:$NGINX_VERSION
+        container_name: khose-ie-nginx-certs-restore
+        entrypoint: tar
+        command:
+            - -zxf
+            - /root/backup/nginx-certs-backup.tar.gz
+            - -C/etc/nginx/cert.d/
+        volumes:
+            - khose-ie-nginx-certs:/etc/nginx/cert.d
+            - $BASE_PATH/backup:/root/backup
+        networks:
+            - nginx
+
+networks:
+    nginx:
+        name: khose-ie-nginx
+
+volumes:
+    khose-ie-nginx-certs:
+        name: khose-ie-nginx-certs
