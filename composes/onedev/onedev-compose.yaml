@@ -1,0 +1,66 @@
+version: "3"
+
+services:
+    onedev-server:
+        image: 1dev/server:$ONEDEV_VERSION
+        container_name: khose-ie-onedev-server
+        restart: unless-stopped
+        ports:
+            - 6610:6610
+        volumes:
+            - onedev-server:/opt/onedev
+            - nginx-confs:/etc/nginx/conf.d
+            - nginx-certs:/etc/nginx/cert.d
+        depends_on:
+            - onedev-database
+        networks:
+            - onedev
+            - khose-ie
+
+    onedev-database:
+        image: postgres:$POSTGRES_VERSION
+        container_name: khose-ie-onedev-database
+        restart: unless-stopped
+        environment:
+            - POSTGRES_DB=$POSTGRES_DB
+            - POSTGRES_USER=$POSTGRES_USER
+            - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+        volumes:
+            - onedev-database:/var/lib/postgresql/data
+        networks:
+            - onedev
+
+    # onedev-agent:
+    #     image: 1dev/agent:latest
+    #     container_name: khose-ie-onedev-agent
+    #     restart: unless-stopped
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock
+    #     environment:
+    #         - serverUrl=$ONEDEV_AGENT_SERVER_URL
+    #         - agentToken=$ONEDEV_AGENT_TOKEN
+    #     networks:
+    #         - onedev
+
+networks:
+    onedev:
+        name: khose-ie-onedev
+
+    khose-ie:
+        name: khose-ie
+        external: true
+
+volumes:
+    onedev-server:
+        name: khose-ie-onedev-server
+
+    onedev-database:
+        name: khose-ie-onedev-database
+
+    nginx-confs:
+        name: khose-ie-nginx-confs
+        external: true
+
+    nginx-certs:
+        name: khose-ie-nginx-certs
+        external: true
