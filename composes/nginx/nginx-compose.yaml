@@ -9,8 +9,8 @@ services:
             - 0.0.0.0:80:80
             - 0.0.0.0:443:443
         volumes:
-            - khose-ie-nginx-confs:/etc/nginx/conf.d
-            - khose-ie-nginx-certs:/etc/nginx/cert.d
+            - nginx-confs:/etc/nginx/conf.d
+            - nginx-certs:/etc/nginx/cert.d
         networks:
             - nginx
             - khose-ie
@@ -24,8 +24,8 @@ networks:
         external: true
 
 volumes:
-    khose-ie-nginx-confs:
+    nginx-confs:
         name: khose-ie-nginx-confs
 
-    khose-ie-nginx-certs:
+    nginx-certs:
         name: khose-ie-nginx-certs
