@@ -5,8 +5,6 @@ services:
         image: 1dev/server:$ONEDEV_VERSION
         container_name: khose-ie-onedev-server
         restart: unless-stopped
-        ports:
-            - 6610:6610
         volumes:
             - onedev-server:/opt/onedev
             - nginx-confs:/etc/nginx/conf.d
