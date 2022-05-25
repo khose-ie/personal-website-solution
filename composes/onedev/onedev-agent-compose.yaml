@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+    onedev-agent:
+        image: 1dev/agent:$ONEDEV_AGENT_VERSION
+        container_name: khose-ie-onedev-agent
+        restart: unless-stopped
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            - serverUrl=$ONEDEV_AGENT_SERVER_URL
+            - agentToken=$ONEDEV_AGENT_TOKEN
+        networks:
+            - onedev
+
+networks:
+    onedev:
+        name: khose-ie-onedev
+
