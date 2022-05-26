@@ -7,6 +7,7 @@ services:
         restart: unless-stopped
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
+        hostname: default-agent
         environment:
             - serverUrl=$ONEDEV_AGENT_SERVER_URL
             - agentToken=$ONEDEV_AGENT_TOKEN
