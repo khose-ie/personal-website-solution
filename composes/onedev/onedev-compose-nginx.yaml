@@ -6,7 +6,7 @@ services:
         container_name: khose-ie-onedev-nginx-backup
         entrypoint: tar
         command: 
-            - -zcvf
+            - -zcf
             - /root/backup/nginx-backup.tar.gz
             - -C/etc
             - nginx
@@ -22,7 +22,7 @@ services:
         container_name: khose-ie-onedev-nginx-restore
         entrypoint: tar
         command:
-            - -zxvf
+            - -zxf
             - /root/backup/nginx-backup.tar.gz
             - -C/etc
         volumes:
