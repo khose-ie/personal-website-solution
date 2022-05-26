@@ -5,7 +5,7 @@ services:
         image: 1dev/server:$ONEDEV_VERSION
         container_name: khose-ie-onedev-onedev-backup
         entrypoint: tar
-        command: 
+        command:
             - -zcf
             - /root/backup/onedev-backup.tar.gz
             - -C/opt/onedev/

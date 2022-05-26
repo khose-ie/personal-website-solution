@@ -6,7 +6,7 @@ services:
         container_name: khose-ie-onedev-database-backup
         entrypoint: /opt/onedev/bin/backup-db.sh
         command: /root/backup/database-backup.zip
-        links: 
+        links:
             - onedev-server
         volumes:
             - onedev-server:/opt/onedev
