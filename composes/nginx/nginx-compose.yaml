@@ -3,7 +3,7 @@ version: "3"
 services:
     nginx:
         image: nginx:$NGINX_VERSION
-        container_name: khose-ie-nginx
+        container_name: website-nginx
         restart: unless-stopped
         ports:
             - 0.0.0.0:80:80
@@ -13,19 +13,19 @@ services:
             - nginx-certs:/etc/nginx/cert.d
         networks:
             - nginx
-            - khose-ie
+            - website
 
 networks:
     nginx:
-        name: khose-ie-nginx
+        name: website-nginx
 
-    khose-ie:
-        name: khose-ie
+    website:
+        name: website
         external: true
 
 volumes:
     nginx-confs:
-        name: khose-ie-nginx-confs
+        name: website-nginx-confs
 
     nginx-certs:
-        name: khose-ie-nginx-certs
+        name: website-nginx-certs

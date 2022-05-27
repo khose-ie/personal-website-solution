@@ -3,7 +3,7 @@ version: "3"
 services:
     nginx-nginx-backup:
         image: nginx:$NGINX_VERSION
-        container_name: khose-ie-nginx-nginx-backup
+        container_name: website-nginx-nginx-backup
         entrypoint: tar
         command:
             - -zcf
@@ -21,7 +21,7 @@ services:
 
     nginx-nginx-restore:
         image: nginx:$NGINX_VERSION
-        container_name: khose-ie-nginx-nginx-restore
+        container_name: website-nginx-nginx-restore
         entrypoint: tar
         command:
             - -zxf
@@ -36,11 +36,11 @@ services:
 
 networks:
     nginx:
-        name: khose-ie-nginx
+        name: website-nginx
 
 volumes:
     nginx-confs:
-        name: khose-ie-nginx-confs
+        name: website-nginx-confs
 
     nginx-certs:
-        name: khose-ie-nginx-certs
+        name: website-nginx-certs

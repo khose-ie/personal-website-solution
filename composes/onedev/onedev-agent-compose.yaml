@@ -3,7 +3,7 @@ version: "3"
 services:
     onedev-agent:
         image: 1dev/agent:$ONEDEV_AGENT_VERSION
-        container_name: khose-ie-onedev-agent
+        container_name: website-onedev-agent
         restart: unless-stopped
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
@@ -16,5 +16,5 @@ services:
 
 networks:
     onedev:
-        name: khose-ie-onedev
+        name: website-onedev
 

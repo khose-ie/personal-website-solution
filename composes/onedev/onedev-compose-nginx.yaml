@@ -3,7 +3,7 @@ version: "3"
 services:
     onedev-nginx-backup:
         image: 1dev/server:$ONEDEV_VERSION
-        container_name: khose-ie-onedev-nginx-backup
+        container_name: website-onedev-nginx-backup
         entrypoint: tar
         command: 
             - -zcf
@@ -19,7 +19,7 @@ services:
 
     onedev-nginx-restore:
         image: 1dev/server:$ONEDEV_VERSION
-        container_name: khose-ie-onedev-nginx-restore
+        container_name: website-onedev-nginx-restore
         entrypoint: tar
         command:
             - -zxf
@@ -34,13 +34,13 @@ services:
 
 networks:
     onedev:
-        name: khose-ie-onedev
+        name: website-onedev
 
 volumes:
     nginx-confs:
-        name: khose-ie-nginx-confs
+        name: website-nginx-confs
         external: true
 
     nginx-certs:
-        name: khose-ie-nginx-certs
+        name: website-nginx-certs
         external: true
