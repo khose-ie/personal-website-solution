@@ -4,7 +4,7 @@ jobs:
   steps:
   - !PushRepository
     name: Push to GitHub
-    remoteUrl: https://github.com/khose-ie/khose-ie-website
+    remoteUrl: https://github.com/khose-ie/personal-website-solution
     userName: khose-ie
     passwordSecret: github-token
     withLfs: false
@@ -24,7 +24,7 @@ jobs:
   steps:
   - !PullRepository
     name: Pull from GitHub
-    remoteUrl: https://github.com/khose-ie/khose-ie-website
+    remoteUrl: https://github.com/khose-ie/personal-website-solution
     userName: khose-ie
     passwordSecret: github-token
     refs: refs/heads/* refs/tags/*
