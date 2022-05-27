@@ -3,10 +3,10 @@ version: "3"
 services:
     onedev-database-backup:
         image: 1dev/server:$ONEDEV_VERSION
-        container_name: khose-ie-onedev-database-backup
+        container_name: website-onedev-database-backup
         entrypoint: /opt/onedev/bin/backup-db.sh
         command: /root/backup/database-backup.zip
-        links: 
+        links:
             - onedev-server
         volumes:
             - onedev-server:/opt/onedev
@@ -19,7 +19,7 @@ services:
 
     onedev-database-restore:
         image: 1dev/server:$ONEDEV_VERSION
-        container_name: khose-ie-onedev-database-restore
+        container_name: website-onedev-database-restore
         entrypoint: /opt/onedev/bin/restore-db.sh
         command: /root/backup/database-backup.zip
         volumes:
@@ -32,8 +32,8 @@ services:
 
 networks:
     onedev:
-        name: khose-ie-onedev
+        name: website-onedev
 
 volumes:
     onedev-server:
-        name: khose-ie-onedev-server
+        name: website-onedev-server

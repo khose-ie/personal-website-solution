@@ -3,10 +3,8 @@ version: "3"
 services:
     onedev-server:
         image: 1dev/server:$ONEDEV_VERSION
-        container_name: khose-ie-onedev-server
+        container_name: website-onedev-server
         restart: unless-stopped
-        ports:
-            - 6610:6610
         volumes:
             - onedev-server:/opt/onedev
             - nginx-confs:/etc/nginx/conf.d
@@ -15,11 +13,11 @@ services:
             - onedev-database
         networks:
             - onedev
-            - khose-ie
+            - website
 
     onedev-database:
         image: postgres:$POSTGRES_VERSION
-        container_name: khose-ie-onedev-database
+        container_name: website-onedev-database
         restart: unless-stopped
         environment:
             - POSTGRES_DB=$POSTGRES_DB
@@ -32,7 +30,7 @@ services:
 
     # onedev-agent:
     #     image: 1dev/agent:latest
-    #     container_name: khose-ie-onedev-agent
+    #     container_name: website-onedev-agent
     #     restart: unless-stopped
     #     volumes:
     #         - /var/run/docker.sock:/var/run/docker.sock
@@ -44,23 +42,23 @@ services:
 
 networks:
     onedev:
-        name: khose-ie-onedev
+        name: website-onedev
 
-    khose-ie:
-        name: khose-ie
+    website:
+        name: website
         external: true
 
 volumes:
     onedev-server:
-        name: khose-ie-onedev-server
+        name: website-onedev-server
 
     onedev-database:
-        name: khose-ie-onedev-database
+        name: website-onedev-database
 
     nginx-confs:
-        name: khose-ie-nginx-confs
+        name: website-nginx-confs
         external: true
 
     nginx-certs:
-        name: khose-ie-nginx-certs
+        name: website-nginx-certs
         external: true

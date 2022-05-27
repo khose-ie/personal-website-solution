@@ -3,9 +3,9 @@ version: "3"
 services:
     onedev-onedev-backup:
         image: 1dev/server:$ONEDEV_VERSION
-        container_name: khose-ie-onedev-onedev-backup
+        container_name: website-onedev-onedev-backup
         entrypoint: tar
-        command: 
+        command:
             - -zcf
             - /root/backup/onedev-backup.tar.gz
             - -C/opt/onedev/
@@ -19,7 +19,7 @@ services:
 
     onedev-onedev-restore:
         image: 1dev/server:$ONEDEV_VERSION
-        container_name: khose-ie-onedev-onedev-restore
+        container_name: website-onedev-onedev-restore
         entrypoint: tar
         command:
             - -zxf
@@ -33,8 +33,8 @@ services:
 
 networks:
     onedev:
-        name: khose-ie-onedev
+        name: website-onedev
 
 volumes:
     onedev-server:
-        name: khose-ie-onedev-server
+        name: website-onedev-server

@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+    focalboard-database-backup:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-database-backup
+        entrypoint: pg_dump
+        command:
+            - -c
+            - -C
+            - -h
+            - focalboard-database
+            - -d
+            - $POSTGRES_DB
+            - -U
+            - $POSTGRES_USER
+            - -f
+            - /root/backup/database-backup.sql
+        environment:
+            - PGPASSWORD=$POSTGRES_PASSWORD
+        volumes:
+            - focalboard-database:/var/lib/postgresql/data
+            - $BASE_PATH/backup:/root/backup
+        depends_on:
+            - focalboard-database
+        networks:
+            - focalboard
+
+    focalboard-database-restore:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-database-restore
+        entrypoint: psql
+        command:
+            - -h
+            - focalboard-database
+            - -d
+            - $POSTGRES_DB
+            - -U
+            - $POSTGRES_USER
+            - -f
+            - /root/backup/database-backup.sql
+        environment:
+            - PGPASSWORD=$POSTGRES_PASSWORD
+        volumes:
+            - focalboard-database:/var/lib/postgresql/data
+            - $BASE_PATH/backup:/root/backup
+        depends_on:
+            - focalboard-database
+        networks:
+            - focalboard
+
+networks:
+    focalboard:
+        name: website-focalboard
+
+volumes:
+    focalboard-database:
+        name: website-focalboard-database

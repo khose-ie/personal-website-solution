@@ -1,40 +1,41 @@
 version: "3"
 
 services:
-    onedev-nginx-backup:
-        image: 1dev/server:$ONEDEV_VERSION
-        container_name: website-onedev-nginx-backup
+    focalboard-nginx-backup:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-nginx-backup
         entrypoint: tar
-        command: 
+        command:
             - -zcf
             - /root/backup/nginx-backup.tar.gz
-            - -C/etc
-            - nginx
+            - -C/etc/nginx/
+            - conf.d/
+            - cert.d/
         volumes:
             - nginx-confs:/etc/nginx/conf.d
             - nginx-certs:/etc/nginx/cert.d
             - $BASE_PATH/backup:/root/backup
         networks:
-            - onedev
+            - focalboard
 
-    onedev-nginx-restore:
-        image: 1dev/server:$ONEDEV_VERSION
-        container_name: website-onedev-nginx-restore
+    focalboard-nginx-restore:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-nginx-restore
         entrypoint: tar
         command:
             - -zxf
             - /root/backup/nginx-backup.tar.gz
-            - -C/etc
+            - -C/etc/nginx/
         volumes:
             - nginx-confs:/etc/nginx/conf.d
             - nginx-certs:/etc/nginx/cert.d
             - $BASE_PATH/backup:/root/backup
         networks:
-            - onedev
+            - focalboard
 
 networks:
-    onedev:
-        name: website-onedev
+    focalboard:
+        name: website-focalboard
 
 volumes:
     nginx-confs:

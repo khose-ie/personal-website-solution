@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+    focalboard-server:
+        image: mattermost/focalboard:$FOCALBOARD_VERSION
+        container_name: website-focalboard-server
+        restart: unless-stopped
+        volumes:
+            - $BASE_PATH/volume/focalboard/config.json:/opt/focalboard/config.json
+            - focalboard-server-files:/opt/focalboard/files
+            - nginx-confs:/etc/nginx/conf.d
+            - nginx-certs:/etc/nginx/cert.d
+        depends_on:
+            - focalboard-database
+        networks:
+            - focalboard
+            - website
+
+    focalboard-database:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-database
+        restart: unless-stopped
+        environment:
+            - POSTGRES_DB=$POSTGRES_DB
+            - POSTGRES_USER=$POSTGRES_USER
+            - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+        volumes:
+            - focalboard-database:/var/lib/postgresql/data
+        networks:
+            - focalboard
+
+networks:
+    focalboard:
+        name: website-focalboard
+
+    website:
+        name: website
+        external: true
+
+volumes:
+    focalboard-server-files:
+        name: website-focalboard-server-files
+
+    focalboard-database:
+        name: website-focalboard-database
+
+    nginx-confs:
+        name: website-nginx-confs
+        external: true
+
+    nginx-certs:
+        name: website-nginx-certs
+        external: true
