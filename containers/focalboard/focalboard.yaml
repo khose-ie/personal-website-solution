@@ -5,6 +5,7 @@ services:
         image: mattermost/focalboard:$FOCALBOARD_VERSION
         container_name: website-focalboard-server
         restart: unless-stopped
+        user: root
         volumes:
             - $BASE_PATH/volume/focalboard/config.json:/opt/focalboard/config.json
             - focalboard-server-files:/opt/focalboard/files

@@ -6,7 +6,9 @@ services:
         container_name: website-nginx-nginx-enable
         entrypoint: cp
         command:
-            - /root/volume/default.*
+            - /root/volume/default.conf
+            - /root/volume/default.pem
+            - /root/volume/default.key
             - /etc/nginx/conf.d
         volumes:
             - nginx-confd:/etc/nginx/conf.d
@@ -19,7 +21,9 @@ services:
         container_name: website-nginx-nginx-disable
         entrypoint: rm
         command:
-            - /etc/nginx/conf.d/default.*
+            - /etc/nginx/conf.d/default.conf
+            - /etc/nginx/conf.d/default.pem
+            - /etc/nginx/conf.d/default.key
         volumes:
             - nginx-confd:/etc/nginx/conf.d
         networks:

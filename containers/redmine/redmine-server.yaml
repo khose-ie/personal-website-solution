@@ -35,7 +35,9 @@ services:
         container_name: website-redmine-server-enable
         entrypoint: cp
         command:
-            - /root/volume/redmine.*
+            - /root/volume/redmine.conf
+            - /root/volume/redmine.pem
+            - /root/volume/redmine.key
             - /etc/nginx/conf.d
         volumes:
             - nginx-confd:/etc/nginx/conf.d
@@ -48,7 +50,9 @@ services:
         container_name: website-redmine-server-disable
         entrypoint: rm
         command:
-            - /etc/nginx/conf.d/redmine.*
+            - /etc/nginx/conf.d/redmine.conf
+            - /etc/nginx/conf.d/redmine.pem
+            - /etc/nginx/conf.d/redmine.key
         volumes:
             - nginx-confd:/etc/nginx/conf.d
         networks:

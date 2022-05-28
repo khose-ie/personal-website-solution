@@ -36,7 +36,9 @@ services:
         container_name: website-onedev-server-enable
         entrypoint: cp
         command:
-            - /root/volume/onedev.*
+            - /root/volume/onedev.conf
+            - /root/volume/onedev.pem
+            - /root/volume/onedev.key
             - /etc/nginx/conf.d
         volumes:
             - nginx-confd:/etc/nginx/conf.d
@@ -49,7 +51,9 @@ services:
         container_name: website-onedev-server-disable
         entrypoint: rm
         command:
-            - /etc/nginx/conf.d/onedev.*
+            - /etc/nginx/conf.d/onedev.conf
+            - /etc/nginx/conf.d/onedev.pem
+            - /etc/nginx/conf.d/onedev.key
         volumes:
             - nginx-confd:/etc/nginx/conf.d
         networks:

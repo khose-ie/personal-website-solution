@@ -35,7 +35,9 @@ services:
         container_name: website-focalboard-server-enable
         entrypoint: cp
         command:
-            - /root/volume/focalboard.*
+            - /root/volume/focalboard.conf
+            - /root/volume/focalboard.pem
+            - /root/volume/focalboard.key
             - /etc/nginx/conf.d
         volumes:
             - nginx-confd:/etc/nginx/conf.d
@@ -48,7 +50,9 @@ services:
         container_name: website-focalboard-server-disable
         entrypoint: rm
         command:
-            - /etc/nginx/conf.d/focalboard.*
+            - /etc/nginx/conf.d/focalboard.conf
+            - /etc/nginx/conf.d/focalboard.pem
+            - /etc/nginx/conf.d/focalboard.key
         volumes:
             - nginx-confd:/etc/nginx/conf.d
         networks:
@@ -61,3 +65,7 @@ networks:
 volumes:
     focalboard-server-files:
         name: website-focalboard-server-files
+
+    nginx-confd:
+        name: website-nginx-confd
+        external: true
