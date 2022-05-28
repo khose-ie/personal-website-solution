@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+    redmine-nginx-backup:
+        image: redmine:$REDMINE_VERSION
+        container_name: website-redmine-nginx-backup
+        entrypoint: tar
+        command: 
+            - -zcf
+            - /root/backup/nginx-backup.tar.gz
+            - -C/etc
+            - nginx
+        volumes:
+            - nginx-confs:/etc/nginx/conf.d
+            - nginx-certs:/etc/nginx/cert.d
+            - $BASE_PATH/backup:/root/backup
+        networks:
+            - redmine
+
+    redmine-nginx-restore:
+        image: redmine:$REDMINE_VERSION
+        container_name: website-redmine-nginx-restore
+        entrypoint: tar
+        command:
+            - -zxf
+            - /root/backup/nginx-backup.tar.gz
+            - -C/etc
+        volumes:
+            - nginx-confs:/etc/nginx/conf.d
+            - nginx-certs:/etc/nginx/cert.d
+            - $BASE_PATH/backup:/root/backup
+        networks:
+            - redmine
+
+networks:
+    redmine:
+        name: website-redmine
+
+volumes:
+    nginx-confs:
+        name: website-nginx-confs
+        external: true
+
+    nginx-certs:
+        name: website-nginx-certs
+        external: true

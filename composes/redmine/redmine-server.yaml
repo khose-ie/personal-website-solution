@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+    redmine-server-backup:
+        image: redmine:$REDMINE_VERSION
+        container_name: website-redmine-server-backup
+        entrypoint: tar
+        command:
+            - -zcf
+            - /root/backup/redmine-server-backup.tar.gz
+            - -C/usr/src/redmine/
+            - files
+        volumes:
+            - redmine-server:/usr/src/redmine/files
+            - $BASE_PATH/backup:/root/backup
+        networks:
+            - redmine
+
+    redmine-server-restore:
+        image: redmine:$REDMINE_VERSION 
+        container_name: website-redmine-server-restore
+        entrypoint: tar
+        command:
+            - -zxf
+            - /root/backup/redmine-server-backup.tar.gz
+            - -C/usr/src/redmine/
+        volumes:
+            - redmine-server:/usr/src/redmine/files
+            - $BASE_PATH/backup:/root/backup
+        networks:
+            - redmine
+
+
+networks:
+    redmine:
+        name: website-redmine
+
+volumes:
+    redmine-server:
+        name: website-redmine-server

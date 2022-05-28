@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+    redmine-database-backup:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-redmine-database-backup
+        entrypoint: pg_dump
+        command:
+            - -c
+            - -C
+            - -h
+            - redmine-database
+            - -d
+            - $POSTGRES_DB
+            - -U
+            - $POSTGRES_USER
+            - -f
+            - /root/backup/redmine-database-backup.sql
+        environment:
+            - PGPASSWORD=$POSTGRES_PASSWORD
+        volumes:
+            - redmine-database:/var/lib/postgresql/data
+            - $BASE_PATH/backup:/root/backup
+        depends_on:
+            - redmine-database
+        networks:
+            - redmine
+
+    redmine-database-restore:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-redmine-database-restore
+        entrypoint: psql
+        command:
+            - -h
+            - redmine-database
+            - -d
+            - $POSTGRES_DB
+            - -U
+            - $POSTGRES_USER
+            - -f
+            - /root/backup/redmine-database-backup.sql
+        environment:
+            - PGPASSWORD=$POSTGRES_PASSWORD
+        volumes:
+            - redmine-database:/var/lib/postgresql/data
+            - $BASE_PATH/backup:/root/backup
+        depends_on:
+            - redmine-database
+        networks:
+            - redmine
+
+networks:
+    redmine:
+        name: website-redmine
+
+volumes:
+    redmine-database:
+        name: website-redmine-database
