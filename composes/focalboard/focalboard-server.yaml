@@ -30,6 +30,30 @@ services:
         networks:
             - focalboard
 
+    focalboard-server-enable:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-server-enable
+        entrypoint: cp
+        command:
+            - /root/volume/focalboard.*
+            - /etc/nginx/conf.d
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+            - $BASE_PATH/volume/nginx:/root/volume
+        networks:
+            - focalboard
+
+    focalboard-server-disable:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-server-disable
+        entrypoint: rm
+        command:
+            - /etc/nginx/conf.d/focalboard.*
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+        networks:
+            - focalboard
+
 networks:
     focalboard:
         name: website-focalboard

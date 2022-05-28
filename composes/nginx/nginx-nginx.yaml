@@ -1,36 +1,27 @@
 version: "3"
 
 services:
-    nginx-nginx-backup:
+    nginx-nginx-enable:
         image: nginx:$NGINX_VERSION
-        container_name: website-nginx-nginx-backup
-        entrypoint: tar
+        container_name: website-nginx-nginx-enable
+        entrypoint: cp
         command:
-            - -zcf
-            - /root/backup/nginx-nginx-backup.tar.gz
-            - -C/etc/nginx/
-            - conf.d/default.conf
-            - cert.d/$MAIN_CERT_PEM
-            - cert.d/$MAIN_CERT_KEY
+            - /root/volume/default.*
+            - /etc/nginx/conf.d
         volumes:
-            - nginx-confs:/etc/nginx/conf.d
-            - nginx-certs:/etc/nginx/cert.d
-            - $BASE_PATH/backup:/root/backup
+            - nginx-confd:/etc/nginx/conf.d
+            - $BASE_PATH/volume/nginx:/root/volume
         networks:
             - nginx
 
-    nginx-nginx-restore:
+    nginx-nginx-disable:
         image: nginx:$NGINX_VERSION
-        container_name: website-nginx-nginx-restore
-        entrypoint: tar
+        container_name: website-nginx-nginx-disable
+        entrypoint: rm
         command:
-            - -zxf
-            - /root/backup/nginx-nginx-backup.tar.gz
-            - -C/etc/nginx/
+            - /etc/nginx/conf.d/default.*
         volumes:
-            - nginx-confs:/etc/nginx/conf.d
-            - nginx-certs:/etc/nginx/cert.d
-            - $BASE_PATH/backup:/root/backup
+            - nginx-confd:/etc/nginx/conf.d
         networks:
             - nginx
 
@@ -39,8 +30,5 @@ networks:
         name: website-nginx
 
 volumes:
-    nginx-confs:
-        name: website-nginx-confs
-
-    nginx-certs:
-        name: website-nginx-certs
+    nginx-confd:
+        name: website-nginx-confd

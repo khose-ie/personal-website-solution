@@ -7,7 +7,7 @@ docker-compose -f onedev.yaml down
 
 ```bash
 docker-compose -f onedev.yaml -f onedev-database.yaml run --rm onedev-database-backup
-docker-compose -f onedev.yaml -f onedev-onedev.yaml run --rm onedev-onedev-backup
+docker-compose -f onedev.yaml -f onedev-server.yaml run --rm onedev-server-backup
 ```
 
 ```bash
@@ -23,7 +23,7 @@ docker-compose -f onedev.yaml down
 ```
 
 ```bash
-docker-compose -f onedev.yaml -f onedev-onedev.yaml run --rm onedev-onedev-restore
+docker-compose -f onedev.yaml -f onedev-server.yaml run --rm onedev-server-restore
 docker-compose -f onedev.yaml -f onedev-database.yaml run --rm onedev-database-restore
 ```
 

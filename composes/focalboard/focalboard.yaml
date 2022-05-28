@@ -8,8 +8,6 @@ services:
         volumes:
             - $BASE_PATH/volume/focalboard/config.json:/opt/focalboard/config.json
             - focalboard-server-files:/opt/focalboard/files
-            - nginx-confs:/etc/nginx/conf.d
-            - nginx-certs:/etc/nginx/cert.d
         depends_on:
             - focalboard-database
         networks:
@@ -43,11 +41,3 @@ volumes:
 
     focalboard-database:
         name: website-focalboard-database
-
-    nginx-confs:
-        name: website-nginx-confs
-        external: true
-
-    nginx-certs:
-        name: website-nginx-certs
-        external: true

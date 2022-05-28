@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-    onedev-onedev-backup:
+    onedev-server-backup:
         image: 1dev/server:$ONEDEV_VERSION
-        container_name: website-onedev-onedev-backup
+        container_name: website-onedev-server-backup
         entrypoint: tar
         command:
             - -zcf
@@ -17,9 +17,9 @@ services:
         networks:
             - onedev
 
-    onedev-onedev-restore:
+    onedev-server-restore:
         image: 1dev/server:$ONEDEV_VERSION
-        container_name: website-onedev-onedev-restore
+        container_name: website-onedev-server-restore
         entrypoint: tar
         command:
             - -zxf
@@ -31,6 +31,30 @@ services:
         networks:
             - onedev
 
+    onedev-server-enable:
+        image: 1dev/server:$ONEDEV_VERSION
+        container_name: website-onedev-server-enable
+        entrypoint: cp
+        command:
+            - /root/volume/onedev.*
+            - /etc/nginx/conf.d
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+            - $BASE_PATH/volume/nginx:/root/volume
+        networks:
+            - onedev
+
+    onedev-server-disable:
+        image: 1dev/server:$ONEDEV_VERSION
+        container_name: website-onedev-server-disable
+        entrypoint: rm
+        command:
+            - /etc/nginx/conf.d/onedev.*
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+        networks:
+            - onedev
+
 networks:
     onedev:
         name: website-onedev
@@ -38,3 +62,7 @@ networks:
 volumes:
     onedev-server:
         name: website-onedev-server
+
+    nginx-confd:
+        name: website-nginx-confd
+        external: true

@@ -14,8 +14,6 @@ services:
         volumes:
             - $BASE_PATH/volume/redmine/configuration.yml:/usr/src/redmine/config/configuration.yml
             - redmine-server:/usr/src/redmine/files
-            - nginx-confs:/etc/nginx/conf.d
-            - nginx-certs:/etc/nginx/cert.d
         depends_on:
             - redmine-database
         networks:
@@ -49,11 +47,3 @@ volumes:
 
     redmine-database:
         name: website-redmine-database
-
-    nginx-confs:
-        name: website-nginx-confs
-        external: true
-
-    nginx-certs:
-        name: website-nginx-certs
-        external: true

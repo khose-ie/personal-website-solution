@@ -30,6 +30,29 @@ services:
         networks:
             - redmine
 
+    redmine-server-enable:
+        image: redmine:$REDMINE_VERSION
+        container_name: website-redmine-server-enable
+        entrypoint: cp
+        command:
+            - /root/volume/redmine.*
+            - /etc/nginx/conf.d
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+            - $BASE_PATH/volume/nginx:/root/volume
+        networks:
+            - redmine
+
+    redmine-server-disable:
+        image: redmine:$REDMINE_VERSION
+        container_name: website-redmine-server-disable
+        entrypoint: rm
+        command:
+            - /etc/nginx/conf.d/redmine.*
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+        networks:
+            - redmine
 
 networks:
     redmine:
@@ -38,3 +61,7 @@ networks:
 volumes:
     redmine-server:
         name: website-redmine-server
+
+    nginx-confd:
+        name: website-nginx-confd
+        external: true
