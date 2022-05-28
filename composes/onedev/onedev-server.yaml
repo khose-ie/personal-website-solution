@@ -7,7 +7,7 @@ services:
         entrypoint: tar
         command:
             - -zcf
-            - /root/backup/onedev-backup.tar.gz
+            - /root/backup/onedev-server-backup.tar.gz
             - -C/opt/onedev/
             - conf
             - site
@@ -23,7 +23,7 @@ services:
         entrypoint: tar
         command:
             - -zxf
-            - /root/backup/onedev-backup.tar.gz
+            - /root/backup/onedev-server-backup.tar.gz
             - -C/opt/onedev/
         volumes:
             - onedev-server:/opt/onedev

@@ -7,7 +7,7 @@ services:
         entrypoint: tar
         command: 
             - -zcf
-            - /root/backup/nginx-backup.tar.gz
+            - /root/backup/onedev-nginx-backup.tar.gz
             - -C/etc
             - nginx
         volumes:
@@ -23,7 +23,7 @@ services:
         entrypoint: tar
         command:
             - -zxf
-            - /root/backup/nginx-backup.tar.gz
+            - /root/backup/onedev-nginx-backup.tar.gz
             - -C/etc
         volumes:
             - nginx-confs:/etc/nginx/conf.d

@@ -7,7 +7,7 @@ services:
         entrypoint: tar
         command:
             - -zcf
-            - /root/backup/server-backup.tar.gz
+            - /root/backup/focalboard-server-backup.tar.gz
             - -C/opt/focalboard/
             - files
         volumes:
@@ -22,7 +22,7 @@ services:
         entrypoint: tar
         command:
             - -zxf
-            - /root/backup/server-backup.tar.gz
+            - /root/backup/focalboard-server-backup.tar.gz
             - -C/opt/focalboard/
         volumes:
             - focalboard-server-files:/opt/focalboard/files

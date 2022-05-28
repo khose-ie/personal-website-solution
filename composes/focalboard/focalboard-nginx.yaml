@@ -7,7 +7,7 @@ services:
         entrypoint: tar
         command:
             - -zcf
-            - /root/backup/nginx-backup.tar.gz
+            - /root/backup/focalboard-nginx-backup.tar.gz
             - -C/etc/nginx/
             - conf.d/
             - cert.d/
@@ -24,7 +24,7 @@ services:
         entrypoint: tar
         command:
             - -zxf
-            - /root/backup/nginx-backup.tar.gz
+            - /root/backup/focalboard-nginx-backup.tar.gz
             - -C/etc/nginx/
         volumes:
             - nginx-confs:/etc/nginx/conf.d
