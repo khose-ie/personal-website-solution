@@ -12,7 +12,7 @@ services:
             - files
         volumes:
             - focalboard-server-files:/opt/focalboard/files
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         networks:
             - focalboard
 
@@ -26,7 +26,7 @@ services:
             - -C/opt/focalboard/
         volumes:
             - focalboard-server-files:/opt/focalboard/files
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         networks:
             - focalboard
 

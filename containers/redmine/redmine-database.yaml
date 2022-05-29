@@ -20,7 +20,7 @@ services:
             - PGPASSWORD=$POSTGRES_PASSWORD
         volumes:
             - redmine-database:/var/lib/postgresql/data
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         depends_on:
             - redmine-database
         networks:
@@ -43,7 +43,7 @@ services:
             - PGPASSWORD=$POSTGRES_PASSWORD
         volumes:
             - redmine-database:/var/lib/postgresql/data
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         depends_on:
             - redmine-database
         networks:

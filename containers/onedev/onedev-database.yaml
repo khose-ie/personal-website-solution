@@ -10,7 +10,7 @@ services:
             - onedev-server
         volumes:
             - onedev-server:/opt/onedev
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         depends_on:
             - onedev-server
             - onedev-database
@@ -24,7 +24,7 @@ services:
         command: /root/backup/onedev-database-backup.zip
         volumes:
             - onedev-server:/opt/onedev
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         depends_on:
             - onedev-database
         networks:

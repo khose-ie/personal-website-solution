@@ -12,7 +12,7 @@ services:
             - files
         volumes:
             - redmine-server:/usr/src/redmine/files
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         networks:
             - redmine
 
@@ -26,7 +26,7 @@ services:
             - -C/usr/src/redmine/
         volumes:
             - redmine-server:/usr/src/redmine/files
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         networks:
             - redmine
 

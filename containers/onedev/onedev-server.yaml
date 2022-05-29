@@ -13,7 +13,7 @@ services:
             - site
         volumes:
             - onedev-server:/opt/onedev
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         networks:
             - onedev
 
@@ -27,7 +27,7 @@ services:
             - -C/opt/onedev/
         volumes:
             - onedev-server:/opt/onedev
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         networks:
             - onedev
 
