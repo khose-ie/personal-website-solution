@@ -1,0 +1,164 @@
+#!/bin/bash
+set -e
+set -o pipefail
+
+SELF_PATH=$(dirname $0)
+CONFIG_PATH=$SELF_PATH/../config/website.conf
+BASE_PATH=/root/website/
+CONTAINER_PATH=$BASE_PATH/containers
+
+DOCKER_COMPOSE=docker\ compose
+MAIN_APP=nginx
+
+source $CONFIG_PATH
+
+function main() {
+    command=$(arguments_prase_command $@)
+    appNames=$(arguments_prase_app_names $@)
+
+    case $command in
+        list) command_list;;
+        enable) command_enable $appNames;;
+        disable) command_disable $appNames;;
+        up) command_up $appNames;;
+        down) command_down $appNames;;
+        backup) command_backup $appNames;;
+        restore) command_restore $appNames;;
+        *) command_help;;
+    esac
+}
+
+function arguments_prase_command() {
+    command=help
+
+    if [ "$#" -gt "0" ]; then
+        command=$1
+    fi
+
+    echo $command
+}
+
+function arguments_prase_app_names() {
+    shift;
+    appNames=$@
+
+    if [ -z "$appNames" ]; then
+        appNames=$ENABLED_APP_LIST
+    fi
+
+    echo $appNames
+}
+
+function command_list() {
+    echo -e " + ${APP_LIST// /\\n + }"
+}
+
+function command_enable() {
+    command_enable_application $MAIN_APP
+    while [ $# -ne 0 ]; do
+        appName=$1
+        command_enable_application $appName
+        shift
+    done
+}
+
+function command_enable_application() {
+    appName=$1
+    sed -i "s/#\ ENABLED_APP_LIST+=$appName/ENABLED_APP_LIST+=$appName/g" $CONFIG_PATH
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-server.yaml run --rm $appName-server-enable
+}
+
+function command_disable() {
+    while [ $# -ne 0 ]; do
+        appName=$1
+        command_disable_application $appName
+        shift
+    done
+}
+
+function command_disable_application() {
+    appName=$1
+    sed -i "s/ENABLED_APP_LIST+=$appName/#\ ENABLED_APP_LIST+=$appName/g" $CONFIG_PATH
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-server.yaml run --rm $appName-server-disable
+}
+
+function command_up() {
+    while [ $# -ne 0 ]; do
+        appName=$1
+        command_up_application $appName
+        shift
+    done
+    sleep 10; command_up_application $MAIN_APP
+}
+
+function command_up_application() {
+    appName=$1
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml up -d
+}
+
+function command_down() {
+    while [ $# -ne 0 ]; do
+        appName=$1
+        command_down_application $appName
+        shift
+    done
+}
+
+function command_down_application() {
+    appName=$1
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml down
+}
+
+function command_backup() {
+    while [ $# -ne 0 ]; do
+        appName=$1
+        command_backup_application $appName
+        shift
+    done
+}
+
+function command_backup_application() {
+    appName=$1
+
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml down
+    [ -f $CONTAINER_PATH/$appName/$appName-database.yaml ] && $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-database.yaml run --rm $appName-database-backup
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-server.yaml run --rm $appName-server-backup
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml up -d
+}
+
+function command_restore() {
+    while [ $# -ne 0 ]; do
+        appName=$1
+        command_restore_container $appName
+        shift
+    done
+}
+
+function command_restore_container() {
+    appName=$1
+
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml up -d; sleep 10
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml down
+
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-server.yaml run --rm $appName-server-restore
+    [ -f $CONTAINER_PATH/$appName/$appName-database.yaml ] && $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-database.yaml run --rm $appName-database-restore
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml down
+}
+
+function command_help() {
+    echo ""
+    echo "Usage:  website <COMMAND> [APPS]..."
+    echo ""
+    echo "Commands:"
+    echo "    list:     List applications"
+    echo "    enable:   Enable an application, empty in [APPS] will only enable NGINX."
+    echo "    disable:  Disable an application."
+    echo "    up:       Up an application"
+    echo "    down:     Down an application"
+    echo "    backup:   Backup an application files and database."
+    echo "    restore:  Restore an application files and database."
+    echo ""
+}
+
+main $@
+exit $?
