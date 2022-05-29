@@ -7,8 +7,6 @@ services:
         restart: unless-stopped
         volumes:
             - onedev-server:/opt/onedev
-            - nginx-confs:/etc/nginx/conf.d
-            - nginx-certs:/etc/nginx/cert.d
         depends_on:
             - onedev-database
         networks:
@@ -54,11 +52,3 @@ volumes:
 
     onedev-database:
         name: website-onedev-database
-
-    nginx-confs:
-        name: website-nginx-confs
-        external: true
-
-    nginx-certs:
-        name: website-nginx-certs
-        external: true

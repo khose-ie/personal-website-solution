@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+    redmine-server:
+        image: redmine:$REDMINE_VERSION
+        container_name: website-redmine-server
+        restart: unless-stopped
+        environment:
+            - REDMINE_DB_POSTGRES=redmine-database
+            - REDMINE_DB_DATABASE=$POSTGRES_DB
+            - REDMINE_DB_USERNAME=$POSTGRES_USER
+            - REDMINE_DB_PASSWORD=$POSTGRES_PASSWORD
+            - REDMINE_SECRET_KEY_BASE=supersecretkey
+        volumes:
+            - $BASE_PATH/volume/redmine/configuration.yml:/usr/src/redmine/config/configuration.yml
+            - redmine-server:/usr/src/redmine/files
+        depends_on:
+            - redmine-database
+        networks:
+            - redmine
+            - website
+
+    redmine-database:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-redmine-database
+        restart: unless-stopped
+        environment:
+            - POSTGRES_DB=$POSTGRES_DB
+            - POSTGRES_USER=$POSTGRES_USER
+            - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+        volumes:
+            - redmine-database:/var/lib/postgresql/data
+        networks:
+            - redmine
+
+networks:
+    redmine:
+        name: website-redmine
+
+    website:
+        name: website
+        external: true
+
+volumes:
+    redmine-server:
+        name: website-redmine-server
+
+    redmine-database:
+        name: website-redmine-database

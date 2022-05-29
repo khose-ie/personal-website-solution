@@ -1,0 +1,72 @@
+version: "3"
+
+services:
+    onedev-server-backup:
+        image: 1dev/server:$ONEDEV_VERSION
+        container_name: website-onedev-server-backup
+        entrypoint: tar
+        command:
+            - -zcf
+            - /root/backup/onedev-server-backup.tar.gz
+            - -C/opt/onedev/
+            - conf
+            - site
+        volumes:
+            - onedev-server:/opt/onedev
+            - $BACKUP_PATH:/root/backup
+        networks:
+            - onedev
+
+    onedev-server-restore:
+        image: 1dev/server:$ONEDEV_VERSION
+        container_name: website-onedev-server-restore
+        entrypoint: tar
+        command:
+            - -zxf
+            - /root/backup/onedev-server-backup.tar.gz
+            - -C/opt/onedev/
+        volumes:
+            - onedev-server:/opt/onedev
+            - $BACKUP_PATH:/root/backup
+        networks:
+            - onedev
+
+    onedev-server-enable:
+        image: 1dev/server:$ONEDEV_VERSION
+        container_name: website-onedev-server-enable
+        entrypoint: cp
+        command:
+            - /root/volume/onedev.conf
+            - /root/volume/onedev.pem
+            - /root/volume/onedev.key
+            - /etc/nginx/conf.d
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+            - $BASE_PATH/volume/nginx:/root/volume
+        networks:
+            - onedev
+
+    onedev-server-disable:
+        image: 1dev/server:$ONEDEV_VERSION
+        container_name: website-onedev-server-disable
+        entrypoint: rm
+        command:
+            - /etc/nginx/conf.d/onedev.conf
+            - /etc/nginx/conf.d/onedev.pem
+            - /etc/nginx/conf.d/onedev.key
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+        networks:
+            - onedev
+
+networks:
+    onedev:
+        name: website-onedev
+
+volumes:
+    onedev-server:
+        name: website-onedev-server
+
+    nginx-confd:
+        name: website-nginx-confd
+        external: true

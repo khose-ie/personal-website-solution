@@ -9,8 +9,7 @@ services:
             - 0.0.0.0:80:80
             - 0.0.0.0:443:443
         volumes:
-            - nginx-confs:/etc/nginx/conf.d
-            - nginx-certs:/etc/nginx/cert.d
+            - nginx-confd:/etc/nginx/conf.d
         networks:
             - nginx
             - website
@@ -24,8 +23,5 @@ networks:
         external: true
 
 volumes:
-    nginx-confs:
-        name: website-nginx-confs
-
-    nginx-certs:
-        name: website-nginx-certs
+    nginx-confd:
+        name: website-nginx-confd

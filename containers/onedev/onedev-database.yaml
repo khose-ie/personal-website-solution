@@ -5,12 +5,12 @@ services:
         image: 1dev/server:$ONEDEV_VERSION
         container_name: website-onedev-database-backup
         entrypoint: /opt/onedev/bin/backup-db.sh
-        command: /root/backup/database-backup.zip
+        command: /root/backup/onedev-database-backup.zip
         links:
             - onedev-server
         volumes:
             - onedev-server:/opt/onedev
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         depends_on:
             - onedev-server
             - onedev-database
@@ -21,10 +21,10 @@ services:
         image: 1dev/server:$ONEDEV_VERSION
         container_name: website-onedev-database-restore
         entrypoint: /opt/onedev/bin/restore-db.sh
-        command: /root/backup/database-backup.zip
+        command: /root/backup/onedev-database-backup.zip
         volumes:
             - onedev-server:/opt/onedev
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         depends_on:
             - onedev-database
         networks:

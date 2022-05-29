@@ -1,0 +1,71 @@
+version: "3"
+
+services:
+    focalboard-server-backup:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-server-backup
+        entrypoint: tar
+        command:
+            - -zcf
+            - /root/backup/focalboard-server-backup.tar.gz
+            - -C/opt/focalboard/
+            - files
+        volumes:
+            - focalboard-server-files:/opt/focalboard/files
+            - $BACKUP_PATH:/root/backup
+        networks:
+            - focalboard
+
+    focalboard-server-restore:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-server-restore
+        entrypoint: tar
+        command:
+            - -zxf
+            - /root/backup/focalboard-server-backup.tar.gz
+            - -C/opt/focalboard/
+        volumes:
+            - focalboard-server-files:/opt/focalboard/files
+            - $BACKUP_PATH:/root/backup
+        networks:
+            - focalboard
+
+    focalboard-server-enable:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-server-enable
+        entrypoint: cp
+        command:
+            - /root/volume/focalboard.conf
+            - /root/volume/focalboard.pem
+            - /root/volume/focalboard.key
+            - /etc/nginx/conf.d
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+            - $BASE_PATH/volume/nginx:/root/volume
+        networks:
+            - focalboard
+
+    focalboard-server-disable:
+        image: postgres:$POSTGRES_VERSION
+        container_name: website-focalboard-server-disable
+        entrypoint: rm
+        command:
+            - /etc/nginx/conf.d/focalboard.conf
+            - /etc/nginx/conf.d/focalboard.pem
+            - /etc/nginx/conf.d/focalboard.key
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+        networks:
+            - focalboard
+
+networks:
+    focalboard:
+        name: website-focalboard
+
+volumes:
+    focalboard-server-files:
+        name: website-focalboard-server-files
+
+    nginx-confd:
+        name: website-nginx-confd
+        external: true

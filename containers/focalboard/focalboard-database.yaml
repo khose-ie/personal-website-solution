@@ -15,12 +15,12 @@ services:
             - -U
             - $POSTGRES_USER
             - -f
-            - /root/backup/database-backup.sql
+            - /root/backup/focalboard-database-backup.sql
         environment:
             - PGPASSWORD=$POSTGRES_PASSWORD
         volumes:
             - focalboard-database:/var/lib/postgresql/data
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         depends_on:
             - focalboard-database
         networks:
@@ -38,12 +38,12 @@ services:
             - -U
             - $POSTGRES_USER
             - -f
-            - /root/backup/database-backup.sql
+            - /root/backup/focalboard-database-backup.sql
         environment:
             - PGPASSWORD=$POSTGRES_PASSWORD
         volumes:
             - focalboard-database:/var/lib/postgresql/data
-            - $BASE_PATH/backup:/root/backup
+            - $BACKUP_PATH:/root/backup
         depends_on:
             - focalboard-database
         networks:

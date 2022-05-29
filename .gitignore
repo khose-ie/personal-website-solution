@@ -11,3 +11,7 @@ Cargo.lock
 
 # Ignore backup file
 **/backup
+
+# Ignore certification files
+*.pem
+*.key
