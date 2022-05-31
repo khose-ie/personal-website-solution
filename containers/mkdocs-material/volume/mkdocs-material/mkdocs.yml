@@ -1,0 +1,35 @@
+site_name: !ENV [MKDOCS_MATERIAL_SITE_NAME, Khose-ie Website]
+site_description: !ENV [MKDOCS_MATERIAL_SITE_DESC, Khose-ie Website]
+
+repo_name: !ENV [MKDOCS_MATERIAL_REPO_NAME, personal-website-solution]
+repo_url: !ENV [MKDOCS_MATERIAL_REPO_URL, https://github.com/khose-ie/personal-website-solution]
+
+copyright: !ENV [MKDOCS_MATERIAL_COPYRIGHT, Copyright &copy;2022 Khose-ie Website]
+
+theme:
+    name: material
+    custom_dir: overrides
+    logo: assets/images/logo.png
+    features:
+        - navigation.tabs
+        - navigation.sections
+        - navigation.top
+    palette:
+        - scheme: default
+          primary: deep purple
+          toggle:
+            icon: material/toggle-switch
+            name: Switch to dark mode
+        - scheme: slate 
+          toggle:
+            icon: material/toggle-switch-off-outline
+            name: Switch to light mode
+    icon:
+        repo: fontawesome/brands/github
+
+markdown_extensions:
+    - attr_list
+    - pymdownx.emoji:
+        emoji_index: !!python/name:materialx.emoji.twemoji
+        emoji_generator: !!python/name:materialx.emoji.to_svg
+    - md_in_html

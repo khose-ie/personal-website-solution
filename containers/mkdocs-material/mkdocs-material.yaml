@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+    mkdocs-material-server:
+        image: squidfunk/mkdocs-material:$MKDOCS_MATERIAL_VERSION
+        container_name: website-mkdocs-material-server
+        restart: unless-stopped
+        volumes:
+            - $BASE_PATH/volume/mkdocs-material/mkdocs.yml:/docs/mkdocs.yml
+            - $BASE_PATH/volume/mkdocs-material/overrides:/docs/overrides
+            - mkdocs-material-server-docs:/docs/docs
+        networks:
+            - mkdocs-material
+            - website
+
+networks:
+    mkdocs-material:
+        name: website-mkdocs-material
+
+    website:
+        name: website
+        external: true
+
+volumes:
+    mkdocs-material-server-docs:
+        name: website-mkdocs-material-server-docs

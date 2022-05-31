@@ -1,0 +1,71 @@
+version: "3"
+
+services:
+    mkdocs-material-server-backup:
+        image: squidfunk/mkdocs-material:$MKDOCS_MATERIAL_VERSION
+        container_name: website-mkdocs-material-server-backup
+        entrypoint: tar
+        command:
+            - -zcf
+            - /root/backup/mkdocs-material-server-backup.tar.gz
+            - -C/docs/
+            - docs
+        volumes:
+            - mkdocs-material-server-docs:/docs/docs
+            - $BACKUP_PATH:/root/backup
+        networks:
+            - mkdocs-material
+
+    mkdocs-material-server-restore:
+        image: squidfunk/mkdocs-material:$MKDOCS_MATERIAL_VERSION
+        container_name: website-mkdocs-material-server-restore
+        entrypoint: tar
+        command:
+            - -zxf
+            - /root/backup/mkdocs-material-server-backup.tar.gz
+            - -C/docs/
+        volumes:
+            - mkdocs-material-server-docs:/docs/docs
+            - $BACKUP_PATH:/root/backup
+        networks:
+            - mkdocs-material
+
+    mkdocs-material-server-enable:
+        image: squidfunk/mkdocs-material:$MKDOCS_MATERIAL_VERSION
+        container_name: website-mkdocs-material-server-enable
+        entrypoint: cp
+        command:
+            - /root/volume/mkdocs-material.conf
+            - /root/volume/mkdocs-material.pem
+            - /root/volume/mkdocs-material.key
+            - /etc/nginx/conf.d
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+            - $BASE_PATH/volume/nginx:/root/volume
+        networks:
+            - mkdocs-material
+
+    mkdocs-material-server-disable:
+        image: squidfunk/mkdocs-material:$MKDOCS_MATERIAL_VERSION
+        container_name: website-mkdocs-material-server-disable
+        entrypoint: rm
+        command:
+            - /etc/nginx/conf.d/mkdocs-material.conf
+            - /etc/nginx/conf.d/mkdocs-material.pem
+            - /etc/nginx/conf.d/mkdocs-material.key
+        volumes:
+            - nginx-confd:/etc/nginx/conf.d
+        networks:
+            - mkdocs-material
+
+networks:
+    mkdocs-material:
+        name: website-mkdocs-material
+
+volumes:
+    mkdocs-material-server-docs:
+        name: website-mkdocs-material-server-docs
+
+    nginx-confd:
+        name: website-nginx-confd
+        external: true
