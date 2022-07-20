@@ -43,7 +43,8 @@ function arguments_prase_app_names() {
     appNames=$@
 
     if [ -z "$appNames" ]; then
-        appNames=$ENABLED_APP_LIST
+        allNames=$(ls $CONTAINER_PATH)
+        appNames=${allNames/$MAIN_APP/}\ $MAIN_APP
     fi
 
     echo $appNames
@@ -54,7 +55,6 @@ function command_list() {
 }
 
 function command_enable() {
-    command_enable_application $MAIN_APP
     while [ $# -ne 0 ]; do
         appName=$1
         command_enable_application $appName
@@ -88,7 +88,6 @@ function command_up() {
         command_up_application $appName
         shift
     done
-    sleep 10; command_up_application $MAIN_APP
 }
 
 function command_up_application() {
