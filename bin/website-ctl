@@ -51,7 +51,17 @@ function arguments_prase_app_names() {
 }
 
 function command_list() {
-    echo -e " + ${APP_LIST// /\\n + }"
+    allNames=$(ls $CONTAINER_PATH)
+    command_list_print $allNames
+}
+
+function command_list_print() {
+    while [ $# -ne 0 ]; do
+        appName=$1
+        appEnable="[-]"
+        [ -f $CONTAINER_PATH/$appName/.enable ] && appEnable="[+]"
+        printf "$appEnable $appName\n"; shift
+    done
 }
 
 function command_enable() {
