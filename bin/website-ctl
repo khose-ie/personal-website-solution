@@ -64,8 +64,7 @@ function command_enable() {
 
 function command_enable_application() {
     appName=$1
-    sed -i "s/#\ ENABLED_APP_LIST+=$appName/ENABLED_APP_LIST+=$appName/g" $CONFIG_PATH
-    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-server.yaml run --rm $appName-server-enable
+    touch $CONTAINER_PATH/$appName/.enable
 }
 
 function command_disable() {
@@ -78,8 +77,7 @@ function command_disable() {
 
 function command_disable_application() {
     appName=$1
-    sed -i "s/ENABLED_APP_LIST+=$appName/#\ ENABLED_APP_LIST+=$appName/g" $CONFIG_PATH
-    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-server.yaml run --rm $appName-server-disable
+    rm -f $CONTAINER_PATH/$appName/.enable
 }
 
 function command_up() {
