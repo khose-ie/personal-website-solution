@@ -90,6 +90,12 @@ function command_up() {
 
 function command_up_application() {
     appName=$1
+
+    if [ ! -f $CONTAINER_PATH/$appName/.enable ]; then
+        printf "[website] Application $appName has not be enabled.\n"
+        return
+    fi
+
     $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml up -d
 }
 
