@@ -124,6 +124,7 @@ function command_backup_application() {
     appName=$1
 
     $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml down
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml up -d $appName-database; sleep 10
 
     [ -f $CONTAINER_PATH/$appName/$appName-server.yaml ] && \
         $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-server.yaml run --rm $appName-server-backup
@@ -144,8 +145,7 @@ function command_restore() {
 function command_restore_container() {
     appName=$1
 
-    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml up -d; sleep 10
-    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml down
+    $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml up -d $appName-database; sleep 10
 
     [ -f $CONTAINER_PATH/$appName/$appName-server.yaml ] && \
         $DOCKER_COMPOSE -f $CONTAINER_PATH/$appName/$appName.yaml -f $CONTAINER_PATH/$appName/$appName-server.yaml run --rm $appName-server-restore
