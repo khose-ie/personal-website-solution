@@ -2,15 +2,15 @@ version: "3"
 
 services:
     onedev-agent:
-        image: 1dev/agent:$ONEDEV_AGENT_VERSION
+        image: 1dev/agent:latest
         container_name: website-onedev-agent
         restart: unless-stopped
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
         hostname: default-agent
         environment:
-            - serverUrl=$ONEDEV_AGENT_SERVER_URL
-            - agentToken=$ONEDEV_AGENT_TOKEN
+            - serverUrl=onedev-server:6610
+            - agentToken=
         networks:
             - onedev
 
