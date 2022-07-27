@@ -5,14 +5,19 @@ services:
         image: nginx:$NGINX_VERSION
         container_name: website-nginx
         restart: unless-stopped
-        ports:
-            - 0.0.0.0:80:80
-            - 0.0.0.0:443:443
+        environment:
+            - BASE_URL=$BASE_URL
+            - HOME_CERT=default
         volumes:
-            - nginx-confd:/etc/nginx/conf.d
+            - $BASE_PATH/containers/nginx/volume/bin/40-enable-apps.sh:/docker-entrypoint.d/40-enable-apps.sh
+            - $BASE_PATH/containers/nginx/volume/config:/root/config
+            - $BASE_PATH/certs:/root/certs
         networks:
             - nginx
             - website
+        ports:
+            - 0.0.0.0:80:80
+            - 0.0.0.0:443:443
 
 networks:
     nginx:
@@ -21,7 +26,3 @@ networks:
     website:
         name: website
         external: true
-
-volumes:
-    nginx-confd:
-        name: website-nginx-confd
