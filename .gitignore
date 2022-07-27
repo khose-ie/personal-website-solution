@@ -18,3 +18,5 @@ Cargo.lock
 
 # Ignore application enable/disable file
 .enable
+
+/config/website-config.env
