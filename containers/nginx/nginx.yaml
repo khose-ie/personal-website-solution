@@ -2,7 +2,7 @@ version: "3"
 
 services:
     nginx:
-        image: nginx:$NGINX_VERSION
+        image: nginx:1.23-alpine
         container_name: website-nginx
         restart: unless-stopped
         environment:
