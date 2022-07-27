@@ -6,8 +6,12 @@ services:
         container_name: website-nginx
         restart: unless-stopped
         environment:
-            - BASE_URL=$BASE_URL
-            - HOME_CERT=default
+            - HOME_URL=$HOME_URL
+            - HOME_CERT=$HOME_CERT
+            - REDMINE_NAME=redmine-server
+            - REDMINE_PORT=3000
+            - REDMINE_URL=$REDMINE_URL
+            - REDMINE_CERT=$REDMINE_CERT
         volumes:
             - $BASE_PATH/containers/nginx/volume/bin/40-enable-apps.sh:/docker-entrypoint.d/40-enable-apps.sh
             - $BASE_PATH/containers/nginx/volume/config:/root/config

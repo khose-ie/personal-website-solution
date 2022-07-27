@@ -4,9 +4,17 @@ APP_CONF_PATH=/root/config
 NGINX_CONFD_PATH=/etc/nginx/conf.d
 
 HOME_CONF=default.conf
-
 cp -f ${APP_CONF_PATH}/${HOME_CONF} ${NGINX_CONFD_PATH}/${HOME_CONF}
-sed -i "s/\${BASE_URL}/${BASE_URL}/g" ${NGINX_CONFD_PATH}/${HOME_CONF}
+sed -i "s/\${HOME_URL}/${HOME_URL}/g" ${NGINX_CONFD_PATH}/${HOME_CONF}
 sed -i "s/\${HOME_CERT}/${HOME_CERT}/g" ${NGINX_CONFD_PATH}/${HOME_CONF}
 
-
+REDMINE_CONF=redmine.conf
+nc -nvz -w 60 ${REDMINE_NAME} ${REDMINE_PORT}
+if [ $? -eq 0 ]; then
+    cp -f ${APP_CONF_PATH}/${REDMINE_CONF} ${NGINX_CONFD_PATH}/${REDMINE_CONF}
+    sed -i "s/\${HOME_URL}/${HOME_URL}/g" ${NGINX_CONFD_PATH}/${REDMINE_CONF}
+    sed -i "s/\${REDMINE_NAME}/${REDMINE_NAME}/g" ${NGINX_CONFD_PATH}/${REDMINE_CONF}
+    sed -i "s/\${REDMINE_PORT}/${REDMINE_PORT}/g" ${NGINX_CONFD_PATH}/${REDMINE_CONF}
+    sed -i "s/\${REDMINE_URL}/${REDMINE_URL}/g" ${NGINX_CONFD_PATH}/${REDMINE_CONF}
+    sed -i "s/\${REDMINE_CERT}/${REDMINE_CERT}/g" ${NGINX_CONFD_PATH}/${REDMINE_CONF}
+fi
