@@ -18,3 +18,14 @@ if [ $? -eq 0 ]; then
     sed -i "s/\${REDMINE_URL}/${REDMINE_URL}/g" ${NGINX_CONFD_PATH}/${REDMINE_CONF}
     sed -i "s/\${REDMINE_CERT}/${REDMINE_CERT}/g" ${NGINX_CONFD_PATH}/${REDMINE_CONF}
 fi
+
+ONEDEV_CONF=onedev.conf
+nc -nvz -w 60 ${ONEDEV_NAME} ${ONEDEV_PORT}
+if [ $? -eq 0 ]; then
+    cp -f ${APP_CONF_PATH}/${ONEDEV_CONF} ${NGINX_CONFD_PATH}/${ONEDEV_CONF}
+    sed -i "s/\${HOME_URL}/${HOME_URL}/g" ${NGINX_CONFD_PATH}/${ONEDEV_CONF}
+    sed -i "s/\${ONEDEV_NAME}/${ONEDEV_NAME}/g" ${NGINX_CONFD_PATH}/${ONEDEV_CONF}
+    sed -i "s/\${ONEDEV_PORT}/${ONEDEV_PORT}/g" ${NGINX_CONFD_PATH}/${ONEDEV_CONF}
+    sed -i "s/\${ONEDEV_URL}/${ONEDEV_URL}/g" ${NGINX_CONFD_PATH}/${ONEDEV_CONF}
+    sed -i "s/\${ONEDEV_CERT}/${ONEDEV_CERT}/g" ${NGINX_CONFD_PATH}/${ONEDEV_CONF}
+fi
