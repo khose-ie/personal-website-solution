@@ -2,7 +2,7 @@ version: "3"
 
 services:
     redmine-server-backup:
-        image: redmine:$REDMINE_VERSION
+        image: redmine:5.0.1-alpine
         container_name: website-redmine-server-backup
         entrypoint: tar
         command:
@@ -12,12 +12,12 @@ services:
             - files
         volumes:
             - redmine-server:/usr/src/redmine/files
-            - $BACKUP_PATH:/root/backup
+            - $BASE_PATH/backup:/root/backup
         networks:
             - redmine
 
     redmine-server-restore:
-        image: redmine:$REDMINE_VERSION 
+        image: redmine:5.0.1-alpine
         container_name: website-redmine-server-restore
         entrypoint: tar
         command:
@@ -26,35 +26,7 @@ services:
             - -C/usr/src/redmine/
         volumes:
             - redmine-server:/usr/src/redmine/files
-            - $BACKUP_PATH:/root/backup
-        networks:
-            - redmine
-
-    redmine-server-enable:
-        image: redmine:$REDMINE_VERSION
-        container_name: website-redmine-server-enable
-        entrypoint: cp
-        command:
-            - /root/volume/redmine.conf
-            - /root/volume/redmine.pem
-            - /root/volume/redmine.key
-            - /etc/nginx/conf.d
-        volumes:
-            - nginx-confd:/etc/nginx/conf.d
-            - $BASE_PATH/volume/nginx:/root/volume
-        networks:
-            - redmine
-
-    redmine-server-disable:
-        image: redmine:$REDMINE_VERSION
-        container_name: website-redmine-server-disable
-        entrypoint: rm
-        command:
-            - /etc/nginx/conf.d/redmine.conf
-            - /etc/nginx/conf.d/redmine.pem
-            - /etc/nginx/conf.d/redmine.key
-        volumes:
-            - nginx-confd:/etc/nginx/conf.d
+            - $BASE_PATH/backup:/root/backup
         networks:
             - redmine
 
@@ -65,7 +37,3 @@ networks:
 volumes:
     redmine-server:
         name: website-redmine-server
-
-    nginx-confd:
-        name: website-nginx-confd
-        external: true

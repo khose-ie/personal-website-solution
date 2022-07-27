@@ -2,17 +2,17 @@ version: "3"
 
 services:
     redmine-server:
-        image: redmine:$REDMINE_VERSION
+        image: redmine:5.0.1-alpine
         container_name: website-redmine-server
         restart: unless-stopped
         environment:
             - REDMINE_DB_POSTGRES=redmine-database
-            - REDMINE_DB_DATABASE=$POSTGRES_DB
-            - REDMINE_DB_USERNAME=$POSTGRES_USER
-            - REDMINE_DB_PASSWORD=$POSTGRES_PASSWORD
+            - REDMINE_DB_DATABASE=redmine
+            - REDMINE_DB_USERNAME=redmine
+            - REDMINE_DB_PASSWORD=redmine
             - REDMINE_SECRET_KEY_BASE=supersecretkey
         volumes:
-            - $BASE_PATH/volume/redmine/configuration.yml:/usr/src/redmine/config/configuration.yml
+            - $BASE_PATH/containers/redmine/volume/config/configuration.yml:/usr/src/redmine/config/configuration.yml
             - redmine-server:/usr/src/redmine/files
         depends_on:
             - redmine-database
@@ -21,13 +21,13 @@ services:
             - website
 
     redmine-database:
-        image: postgres:$POSTGRES_VERSION
+        image: postgres:14.4-alpine
         container_name: website-redmine-database
         restart: unless-stopped
         environment:
-            - POSTGRES_DB=$POSTGRES_DB
-            - POSTGRES_USER=$POSTGRES_USER
-            - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+            - POSTGRES_DB=redmine
+            - POSTGRES_USER=redmine
+            - POSTGRES_PASSWORD=redmine
         volumes:
             - redmine-database:/var/lib/postgresql/data
         networks:
