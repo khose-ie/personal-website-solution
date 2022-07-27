@@ -3,14 +3,14 @@ set -e
 set -o pipefail
 
 SELF_PATH=$(dirname $0)
-CONFIG_PATH=$SELF_PATH/../config/website.conf
-BASE_PATH=/root/website/
+BASE_PATH=/root/website
+CONF_PATH=$BASE_PATH/config/website-config.env
 CONTAINER_PATH=$BASE_PATH/containers
 
 DOCKER_COMPOSE=docker\ compose
 MAIN_APP=nginx
 
-source $CONFIG_PATH
+source $CONF_PATH
 
 function main() {
     command=$(arguments_prase_command $@)
@@ -60,7 +60,7 @@ function command_list_print() {
         appName=$1
         appEnable="[-]"
         [ -f $CONTAINER_PATH/$appName/.enable ] && appEnable="[+]"
-        printf "$appEnable $appName\n"; shift
+        printf "  $appEnable $appName\n"; shift
     done
 }
 
